@@ -39,3 +39,13 @@ class Test(unittest.TestCase):
         a.move_chess(0, 0 + 10)
         assert a.chess_arr[12] == ['○', 15]
         assert a.chess_arr[0] == ['◉', 15]
+
+    def test_change(self):
+        a = nardy.Board()
+        a.turn = 'White'
+        a._ChangePlayer()
+        assert a.turn == 'Black'
+
+        a.turn = 'Black'
+        a._ChangePlayer()
+        assert a.turn == 'White'
