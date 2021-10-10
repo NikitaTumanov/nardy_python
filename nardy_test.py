@@ -25,3 +25,17 @@ class Test(unittest.TestCase):
         for i in a.dice:
             assert i in range(1, 7)
         assert a.dice == 2 or 4
+
+    def test_move(self):
+        a = nardy.Board()
+        assert a.chess_arr[12] == ['○', 15]
+        assert a.chess_arr[0] == ['◉', 15]
+
+        a.move_chess(0, 10)
+        assert a.chess_arr[0 + 10] == ['◉', 1] or a.turn == 'Black'
+        assert a.chess_arr[0] == ['◉', 14] or a.turn == 'Black'
+
+        a.chess_arr[0 + 10] = ['○', 1]
+        a.move_chess(0, 0 + 10)
+        assert a.chess_arr[12] == ['○', 15]
+        assert a.chess_arr[0] == ['◉', 15]
