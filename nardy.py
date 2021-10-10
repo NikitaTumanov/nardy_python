@@ -32,6 +32,68 @@ class Board(object):
             self.outNumLeft = 2
         return [self.dice]
 
+    def move_chess(self, From, To):
+        if not self._IsPossibleToMove(From, To):
+            print('ERROR: Can`t move')
+            time.sleep(1)
+            return 2
+        if From == 0 or From == 12:
+            if self.outNumLeft <= 0:
+                print('\t Can`t out!!!')
+                time.sleep(2)
+                return
+            else:
+                self.outNumLeft -= 1
+        self.chess_arr[From][1] -= 1
+        self.chess_arr[To][1] += 1
+        self.chess_arr[To][0] = self.chess_arr[From][0]
+        self.dice.remove((To - From) % 24)
+
+    def makeTurn(self):
+        self.print()
+        print('\n Dice:', self.dice, 'Turn: {}'.format(self.turn))
+        inp = input('\n  Enter from & to chess position: ').split()
+        if len(inp) != 2:
+            print('Error Input!')
+            time.sleep(1)
+            return 'Error Input!'
+        try:
+            From, To = map(lambda a: (int(a) - 1) % 24, inp)
+        except:
+            print('Error Input!')
+            time.sleep(3)
+            return 2
+        self.move_chess(From, To)
+        while not len(self.dice):
+            self.rollTheDice()
+            self._ChangePlayer()
+
+    def _IsPossibleToMove(self, From, To):
+        from_color, from_num = self.chess_arr[From]
+        to_color, to_num = self.chess_arr[To]
+        c1 = True
+        c2 = (from_color == to_color) or to_num == 0
+        c3 = from_num != 0
+        c4 = len(self.dice)
+        c5 = (from_color == '◉' and self.turn == 'White') or (from_color == '○' and self.turn == 'Black')
+        return c1 and c2 and c3 and c4 and c5
+
+    def _MakeStr(self, pos, color, num):
+        c, n = self.chess_arr[pos]
+        if n > 1:
+            color += '{:^3}'.format(str(c))
+            num += '{:^3}'.format(str(n))
+        elif n == 1:
+            color += '{:^3}'.format(str(c))
+            num += '   '
+        else:
+            color += '   '
+            num += '   '
+        if pos == 6 or pos == 17:
+            color += '   '
+            num += '   '
+        return (color, num)
+
     def _ChangePlayer(self):
         self.turn = 'White' if self.turn == 'Black' else 'Black'
 
