@@ -21,17 +21,6 @@ class Board(object):
             self.turn = 'Black'
         print('\n Dice:', self.dice, 'Start: {}'.format(self.turn))
 
-    def rollTheDice(self):
-        self.dice = []
-        self.dice.append(randint(1, 6))
-        self.dice.append(randint(1, 6))
-        self.outNumLeft = 1
-        if self.dice[0] == self.dice[1]:
-            self.dice.append(self.dice[0])
-            self.dice.append(self.dice[0])
-            self.outNumLeft = 2
-        return [self.dice]
-
     def move_chess(self, From, To):
         if not self._IsPossibleToMove(From, To):
             print('ERROR: Can`t move')
@@ -68,6 +57,32 @@ class Board(object):
             self.rollTheDice()
             self._ChangePlayer()
 
+    def rollTheDice(self):
+        self.dice = []
+        self.dice.append(randint(1, 6))
+        self.dice.append(randint(1, 6))
+        self.outNumLeft = 1
+        if self.dice[0] == self.dice[1]:
+            self.dice.append(self.dice[0])
+            self.dice.append(self.dice[0])
+            self.outNumLeft = 2
+        return [self.dice]
+
+    def print(self):
+        print('  12 11 10 9  8  7     6  5  4  3  2  1 ')
+        print(' ' + '-v-' * 6 + '   ' + '-v-' * 6)
+        t_color = ''
+        t_num = ''
+        for pos in range(11, -1, -1):
+            t_color, t_num = self._MakeStr(pos, t_color, t_num)
+        b_color = ''
+        b_num = ''
+        for pos in range(12, 24, 1):
+            b_color, b_num = self._MakeStr(pos, b_color, b_num)
+        print('\n', t_color, '\n', t_num, '\n' * 5, b_num, '\n', b_color, '\n')
+        print(' ' + '-^-' * 6 + '   ' + '-^-' * 6)
+        print('  13 14 15 16 17 18    19 20 21 22 23 24 ')
+
     def _IsPossibleToMove(self, From, To):
         from_color, from_num = self.chess_arr[From]
         to_color, to_num = self.chess_arr[To]
@@ -97,12 +112,13 @@ class Board(object):
     def _ChangePlayer(self):
         self.turn = 'White' if self.turn == 'Black' else 'Black'
 
-    if __name__ == '__main__':
-        board = Board()
-        print('White & Black dices: ', end='')
-        board.start_game()
-        board.rollTheDice()
-        while True:
-            state = board.makeTurn()
-            if state == 0:
-                exit()
+
+if __name__ == '__main__':
+    board = Board()
+    print('White & Black dices: ', end='')
+    board.start_game()
+    board.rollTheDice()
+    while True:
+        state = board.makeTurn()
+        if state == 0:
+            exit()
