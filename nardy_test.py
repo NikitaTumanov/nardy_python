@@ -18,3 +18,10 @@ class Test(unittest.TestCase):
             assert a.turn == 'White'
         else:
             assert a.turn == 'Black'
+
+    def test_role(self):
+        a = nardy.Board()
+        a.rollTheDice()
+        for i in a.dice:
+            assert i in range(1, 7)
+        assert a.dice == 2 or 4
